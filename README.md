@@ -1,0 +1,59 @@
+# array-pooling-benchmarks
+
+<!DOCTYPE html>
+<html lang='en'>
+<body>
+- As you can see for small arrays, default allocator can be faster than array pooling solution. The bigger it gets, the slower it takes to allocate the memory. 
+Also you should have noticed, that the cost of pooling with ArrayPool<T> is constant and size-independent! It’s great, because you can predict the behaviour of your code.
+<br><br>
+- If you not use array pooling for large arrays, they can be located on gen2 or loh area of garbage collection. So they would be cause full garbage collection. 
+(As a result of that, all another thread will be suspended when garbage collection is working.) 
+<br><br>
+- If you want to learn more things about array pooling and garbage collection behaviours, you can read this <a href="https://adamsitnik.com/Array-Pool/">article</a>.
+<br><br>
+<table>
+<thead><tr><th>    Method</th><th>N</th><th>   Mean</th><th>  Error</th><th> StdDev</th><th> Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>RentString</td><td>10</td><td>28.285 ns</td><td>0.8802 ns</td><td>2.1919 ns</td><td>28.722 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateString</td><td>10</td><td>6.514 ns</td><td>0.7999 ns</td><td>2.1762 ns</td><td>6.318 ns</td><td>0.0166</td><td>-</td><td>-</td><td>104 B</td>
+</tr><tr><td>RentCustomer</td><td>10</td><td>30.028 ns</td><td>2.2651 ns</td><td>6.3141 ns</td><td>26.369 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateCustomer</td><td>10</td><td>6.987 ns</td><td>0.7409 ns</td><td>2.0654 ns</td><td>6.055 ns</td><td>0.0166</td><td>-</td><td>-</td><td>104 B</td>
+</tr><tr><td>RentInt</td><td>10</td><td>31.446 ns</td><td>2.8462 ns</td><td>7.9342 ns</td><td>28.507 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateInt</td><td>10</td><td>5.890 ns</td><td>0.7231 ns</td><td>2.0158 ns</td><td>5.698 ns</td><td>0.0102</td><td>-</td><td>-</td><td>64 B</td>
+</tr><tr><td>RentByte</td><td>10</td><td>29.629 ns</td><td>2.2637 ns</td><td>6.3103 ns</td><td>27.723 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateByte</td><td>10</td><td>4.703 ns</td><td>0.7382 ns</td><td>2.0333 ns</td><td>6.044 ns</td><td>0.0064</td><td>-</td><td>-</td><td>40 B</td>
+</tr><tr><td>RentString</td><td>100</td><td>35.741 ns</td><td>3.6077 ns</td><td>9.6920 ns</td><td>33.315 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateString</td><td>100</td><td>36.973 ns</td><td>3.0437 ns</td><td>8.4847 ns</td><td>35.151 ns</td><td>0.1313</td><td>0.0004</td><td>-</td><td>824 B</td>
+</tr><tr><td>RentCustomer</td><td>100</td><td>34.740 ns</td><td>3.1080 ns</td><td>8.6638 ns</td><td>31.418 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateCustomer</td><td>100</td><td>35.749 ns</td><td>3.5323 ns</td><td>9.5498 ns</td><td>32.062 ns</td><td>0.1313</td><td>0.0004</td><td>-</td><td>824 B</td>
+</tr><tr><td>RentInt</td><td>100</td><td>28.858 ns</td><td>2.1003 ns</td><td>5.8548 ns</td><td>25.999 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateInt</td><td>100</td><td>20.189 ns</td><td>1.2990 ns</td><td>3.5118 ns</td><td>19.220 ns</td><td>0.0676</td><td>0.0001</td><td>-</td><td>424 B</td>
+</tr><tr><td>RentByte</td><td>100</td><td>26.616 ns</td><td>1.7946 ns</td><td>4.8211 ns</td><td>24.541 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateByte</td><td>100</td><td>7.436 ns</td><td>0.6905 ns</td><td>1.8902 ns</td><td>6.564 ns</td><td>0.0204</td><td>-</td><td>-</td><td>128 B</td>
+</tr><tr><td>RentString</td><td>1000</td><td>29.509 ns</td><td>2.2838 ns</td><td>6.1352 ns</td><td>27.891 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateString</td><td>1000</td><td>345.186 ns</td><td>25.7745 ns</td><td>70.9905 ns</td><td>322.406 ns</td><td>1.2784</td><td>0.0372</td><td>-</td><td>8024 B</td>
+</tr><tr><td>RentCustomer</td><td>1000</td><td>31.368 ns</td><td>1.9946 ns</td><td>5.2195 ns</td><td>30.534 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateCustomer</td><td>1000</td><td>338.262 ns</td><td>27.8736 ns</td><td>74.4003 ns</td><td>302.802 ns</td><td>1.2784</td><td>0.0372</td><td>-</td><td>8024 B</td>
+</tr><tr><td>RentInt</td><td>1000</td><td>27.713 ns</td><td>2.3178 ns</td><td>6.3451 ns</td><td>25.756 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateInt</td><td>1000</td><td>161.873 ns</td><td>6.8910 ns</td><td>19.0950 ns</td><td>157.557 ns</td><td>0.6413</td><td>0.0095</td><td>-</td><td>4024 B</td>
+</tr><tr><td>RentByte</td><td>1000</td><td>26.100 ns</td><td>1.1960 ns</td><td>3.0872 ns</td><td>25.390 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateByte</td><td>1000</td><td>45.054 ns</td><td>3.5441 ns</td><td>9.4600 ns</td><td>42.792 ns</td><td>0.1632</td><td>0.0006</td><td>-</td><td>1024 B</td>
+</tr><tr><td>RentString</td><td>10000</td><td>28.101 ns</td><td>1.0461 ns</td><td>2.6816 ns</td><td>27.714 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateString</td><td>10000</td><td>3,327.382 ns</td><td>80.6445 ns</td><td>220.7630 ns</td><td>3,266.940 ns</td><td>12.6572</td><td>2.5291</td><td>-</td><td>80024 B</td>
+</tr><tr><td>RentCustomer</td><td>10000</td><td>28.494 ns</td><td>1.0516 ns</td><td>2.8070 ns</td><td>28.439 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateCustomer</td><td>10000</td><td>3,234.145 ns</td><td>47.6895 ns</td><td>132.1473 ns</td><td>3,207.714 ns</td><td>12.6572</td><td>2.5291</td><td>-</td><td>80024 B</td>
+</tr><tr><td>RentInt</td><td>10000</td><td>24.878 ns</td><td>0.4837 ns</td><td>1.1955 ns</td><td>24.530 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateInt</td><td>10000</td><td>1,389.516 ns</td><td>23.3855 ns</td><td>62.4207 ns</td><td>1,377.001 ns</td><td>6.3286</td><td>0.7896</td><td>-</td><td>40024 B</td>
+</tr><tr><td>RentByte</td><td>10000</td><td>27.543 ns</td><td>1.2466 ns</td><td>3.2622 ns</td><td>27.201 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateByte</td><td>10000</td><td>357.734 ns</td><td>5.9436 ns</td><td>16.2704 ns</td><td>355.936 ns</td><td>1.5945</td><td>0.0567</td><td>-</td><td>10024 B</td>
+</tr><tr><td>RentString</td><td>100000</td><td>31.391 ns</td><td>1.1809 ns</td><td>3.1315 ns</td><td>29.863 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateString</td><td>100000</td><td>82,274.285 ns</td><td>963.6853 ns</td><td>2,621.7768 ns</td><td>81,404.279 ns</td><td>249.8779</td><td>249.8779</td><td>249.8779</td><td>800024 B</td>
+</tr><tr><td>RentCustomer</td><td>100000</td><td>27.319 ns</td><td>1.2798 ns</td><td>3.4818 ns</td><td>25.805 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateCustomer</td><td>100000</td><td>85,534.251 ns</td><td>2,645.6570 ns</td><td>7,152.6874 ns</td><td>83,115.637 ns</td><td>249.8779</td><td>249.8779</td><td>249.8779</td><td>800024 B</td>
+</tr><tr><td>RentInt</td><td>100000</td><td>25.101 ns</td><td>1.1961 ns</td><td>3.1720 ns</td><td>23.120 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateInt</td><td>100000</td><td>18,095.991 ns</td><td>282.6358 ns</td><td>773.7109 ns</td><td>18,177.316 ns</td><td>124.9695</td><td>124.9695</td><td>124.9695</td><td>400024 B</td>
+</tr><tr><td>RentByte</td><td>100000</td><td>23.058 ns</td><td>0.2378 ns</td><td>0.6389 ns</td><td>23.025 ns</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>AllocateByte</td><td>100000</td><td>4,453.113 ns</td><td>43.4925 ns</td><td>119.7910 ns</td><td>4,476.141 ns</td><td>31.2424</td><td>31.2424</td><td>31.2424</td><td>100024 B</td>
+</tr></tbody></table>
+</body>
+</html>
