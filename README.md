@@ -9,7 +9,10 @@ Also you should have noticed, that the cost of pooling with ArrayPool<T> is cons
 - If you not use array pooling for large arrays, they can be located on gen2 or loh area of garbage collection. So they would be cause full garbage collection. 
 (As a result of that, all another thread will be suspended when garbage collection is working.) 
 <br><br>
-- If you want to learn more things about array pooling and garbage collection behaviours, you can read this <a href="https://adamsitnik.com/Array-Pool/">article</a>.
+- If you want to learn more things about array pooling and garbage collection behaviours, you can read this articles. 
+- <a href="https://adamsitnik.com/Array-Pool/">article 1</a>
+- <a href="https://www.isolineltd.com/blog/buffer-memory-pools-in-net.html">article 2</a>
+- <a href="https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/large-object-heap">article 3</a>
 <br><br>
 <table>
 <thead><tr><th>    Method</th><th>N</th><th>   Mean</th><th>  Error</th><th> StdDev</th><th> Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
