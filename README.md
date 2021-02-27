@@ -9,7 +9,7 @@ Also you should have noticed, that the cost of pooling with ArrayPool<T> is cons
 - If you not use array pooling for large arrays, they can be located on gen2 or loh area of garbage collection. So they would be cause full garbage collection. 
 (As a result of that, all another thread will be suspended when garbage collection is working.) 
 <br><br>
-- If you want to learn more things about array pooling and garbage collection behaviours, you can read this articles. 
+- If you want to learn more things about array pooling and garbage collection behaviours, you can read these articles. 
 <br>
 - <a href="https://adamsitnik.com/Array-Pool/">article 1</a>
 <br>
